@@ -1,0 +1,16 @@
+keystone_service_create:
+  cmd.run:
+    - name: openstack --os-token {{ pillar['os_token'] }} --os-url {{ pillar['os_url'] }} --os-identity-api-version {{ pillar['os_v'] }} \
+            service create --name keystone --description "OpenStack Identity" identity
+create_public_endpoint:
+  cmd.run:
+    - name: openstack --os-token {{ pillar['os_token'] }} --os-url {{ pillar['os_url'] }} --os-identity-api-version {{ pillar['os_v'] }} \
+            endpoint create --region RegionOne identity public {{ pillar['os_user_url'] }}
+create_internal_endpoint:
+  cmd.run:
+    - name: openstack --os-token {{ pillar['os_token'] }} --os-url {{ pillar['os_url'] }} --os-identity-api-version {{ pillar['os_v'] }} \
+            endpoint create --region RegionOne identity internal {{ pillar['os_user_url'] }}
+create_admin_endpoint:
+  cmd.run:
+    - name: openstack --os-token {{ pillar['os_token'] }} --os-url {{ pillar['os_url'] }} --os-identity-api-version {{ pillar['os_v'] }} \
+            endpoint create --region RegionOne identity admin {{ pilar['os_url'] }}

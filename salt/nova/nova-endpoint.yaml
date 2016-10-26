@@ -1,0 +1,13 @@
+{% set credentials = ""%}
+openstack_glance_public_endpoint_create:
+  cmd.run:
+    - name: openstack {{ credentials }} endpoint create --region RegionOne \ 
+            compute public {{ pillar['nova_endpoint_addr'] }}
+openstack_glance_internal_endpoint_create:
+  cmd.run:
+    - name: openstack {{ credentials }} endpoint create --region RegionOne \
+            compute internal {{ pillar['nova_endpoint_addr'] }}
+openstack_glance_admin_endpoint_create:
+  cmd.run:
+    - name: openstack {{ credentials }} endpoint create --region RegionOne \
+            compute admin {{ pillar['nova_endpoint_addr'] }}

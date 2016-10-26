@@ -1,0 +1,20 @@
+glance_install:
+  pkg.installed:
+    - name: glance
+glance_api_conf:
+  file.manage:
+    - name: /etc/glance/glance-api.conf
+    - source: salt://glance/glance-api.conf
+glance_registry_conf:
+  file.manage:
+    - name: /etc/glance/glance-registry.conf
+    - source: salt://glance/glance-registry.conf
+glance_db_sync:
+  cmd.run:
+    - name: su -s /bin/sh -c "glance-manage db_sync" glance
+glance_registry_restart:
+  service.restart:
+    - name: glance-registry
+glance_api_restart:
+  service.restart:
+    - name: glance-api

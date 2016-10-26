@@ -1,0 +1,54 @@
+create_keystonedb:
+  mysql.db_create:
+    - name: keystone
+grant_access_to_keystone:
+  mysql.grant_add:
+    - grant: 'ALL PRIVILEGES'
+    - database: 'keystone.'
+    - user: keystone
+    - password: {{ pillar['keystone_dbpass'] }}
+    - host: 'localhost'
+grant_access_to_keystone2:
+  mysql.gant_add:
+    - grant: 'ALL PRIVILEGES'
+    - database: 'keystone.'
+    - user: keystone
+    - password: {{ pillar['keystone_dbpass'] }}
+    - host: '%'
+disable_autostart_keystone:
+  file.append:
+    - name: '/etc/initkeystone.override'
+    - text: 'manual'
+install_pkgs:
+  pkg.installed:
+    - pkgs:
+      - keystone
+      - apache2
+      - libapache2-mod-wsgi
+keystone_configuration:
+  file.manage:
+    - name: /etc/keystone/keystone.conf
+    - source: salt://keystone/keystone.conf
+populate_identity_service:
+  cmd.run:
+    - name: "su -s /bin/sh -c 'keystone-manage db_sync' keystone"
+fernet_keys:
+  cmd.run:
+    - name: 'keystone-manage fernet_setup --keystone-user keystone --keystone-group keystone'
+edit_apache2_conf:
+  file.append:
+    - name: /etc/apache2/apache2.conf
+    - text: 'ServerName controller'
+configure_apache2_for_keystone:
+  file.manage:
+    - name: /etc/apache2/sites-available/wsgi-keystone.conf
+    - source: salt://apache2/sites-available/wsgi-keystone.conf
+enable_identity_service:
+  cmd.run:
+    - name: 'ln -s /etc/apache2/sites-available/wsgi-keystone.conf /etc/apache2/sites-enabled'
+apache_restart:
+  service.restart:
+    - name: apache2
+delete_sqllite:
+  file.absend:
+    - name: /var/lib/keystone/keystone.db

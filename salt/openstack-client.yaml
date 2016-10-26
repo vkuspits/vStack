@@ -1,0 +1,13 @@
+install_requires:
+  pkg.installed:
+    - name: software-properties-common
+add_repo_openstackclient:
+  pkgrepo.managed:
+    name: cloud-archive:mitaka
+update_upgrade:
+  cmd.run: "apt-get update && apt-get dist-upgrade"
+install_openstackclient:
+  pkg.installed:
+    - name: python-openstackclient
+    - require:
+      - pkg: software-properties-common

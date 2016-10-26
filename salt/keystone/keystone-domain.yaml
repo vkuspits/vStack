@@ -1,0 +1,41 @@
+{% set credentials = "--os-token {{ pillar['os_token'] }} --os-url {{ pillar['os_url'] }} --os-identity-api-version {{ pillar['os_v'] }}" %}
+openstack_domain:
+  cmd.run:
+    - name: openstack {{ credentials }} \
+            domain create --description "Default Domain" default
+openstack_admin_project_create:
+  cmd.run:
+    - name: openstack {{ credentials }} \
+            project create --domain default --description "Admin Project" admin
+openstack_admin_user_create:
+  cmd.run:
+    - name: openstack {{ credentials }} \
+            user create --domain default --pass {{ pillar['admin-pass'] }} admin
+openstack_admin_role_create:
+  cmd.run:
+    - name: openstack {{ credentials }} \
+            role create admin
+admin_role_attach:
+  cmd.run:
+    - name: openstack {{ credentials }} \
+            role add --project admin --user admin admin
+openstack_service_project_create:
+  cmd.run:
+    - name: openstack {{ credentials }} \
+            project create --domain default --description "Service Project" service
+openstack_demo_project_create:
+  cmd.run:
+    - name: openstack {{ credentials }} \
+            project create --domain default --description "Demo Project" demo
+openstack_demo_user_create:
+  cmd.run:
+    - name: openstack {{ credentials }} \
+            user create --domain default --pass {{ pillar['demo-pass'] }} demo
+openstack_user_role_create:
+  cmd.run:
+    - name: openstack {{ credentials }} \
+            role create user
+openstack_user_role_attach:
+  cmd.run:
+    - name: openstack {{ credentials }} \
+            role add --project demo --user demo user

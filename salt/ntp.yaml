@@ -1,0 +1,12 @@
+install_ntp:
+  pkg.installed:
+    name: chrony
+config_ntp:
+  file.append:
+    - name: /etc/chrony/chrony.conf
+    - text: "server {{ pillar['ntp-server']}} iburst"
+restart_ntp:
+  service.restart:
+    - name: chrony
+    - require:
+      - pkg: chrony

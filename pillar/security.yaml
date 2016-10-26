@@ -1,0 +1,44 @@
+os_token: admintoken
+
+os_url: http://controller:35357/v3
+
+os_v: 3
+
+admin_pass: admin
+
+ceilometer_dbpass: admindb
+
+ceilometer_pass: admin
+
+cinder_dbpass: admindb
+
+cinder_pass: admin
+
+dash_pass: admin
+
+demo_pass: demo
+
+glance_dbpass: admindb
+
+glance_pass: admin
+
+heat_dbpass: admindb
+
+heat_domain_pass: admin
+
+heat_pass: admin
+
+keystone_dbpass: admindb
+
+neutron_dbpass: admindb
+
+neutron_pass: admin
+
+nova_dbpass: admindb
+
+nova_pass: admin
+
+rabbit_pass: rabbitpass
+
+swift_pass: admin
+

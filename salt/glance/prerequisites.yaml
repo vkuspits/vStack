@@ -1,0 +1,27 @@
+create_glancedb:
+  mysql.db_create:
+    - name: glance
+grant_access_to_keystone:
+  mysql.grant_add:
+    - grant: 'ALL PRIVILEGES'
+    - database: 'glance.'
+    - user: glance
+    - password: {{ pillar['glance_dbpass'] }}
+    - host: 'localhost'
+grant_access_to_keystone2:
+  mysql.grant_add:
+    - grant: 'ALL PRIVILEGES'
+    - database: 'glance.'
+    - user: glance
+    - password: {{ pillar['glance_dbpass'] }}
+    - host: '%'
+{% set credentials = "--os-token {{ pillar['os_token'] }} --os-url {{ pillar['os_url'] }} --os-identity-api-version {{ pillar['os_v'] }}" %}
+openstack_glance_user_create:
+  cmd.run:
+    - name: openstack {{ credentials }} user create --domain default --pass {{ pillar['glance_pass'] }} glance
+openstack_glance_admin_role_attach:
+  cdm.run:
+    - name: openstack {{ credentials }} role add -project service --user glance admin
+openstack_glance_service_create:
+  cmd.run:
+    - name: openstack {{ credentials }} service create --name glance --description "OpenstackImage" image

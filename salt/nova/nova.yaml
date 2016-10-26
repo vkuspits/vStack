@@ -1,0 +1,26 @@
+nova_install:
+  pkg.installed:
+    - pkgs:
+      - nova-api
+      - nova-conductor
+      - nova-consoleauth
+      - nova-novncproxy
+      - nova-scheduler
+nova_api_conf:
+  file.manage:
+    - name: /etc/nova/nova.conf
+    - source: salt://nova/nova.conf
+nova_db_sync:
+  cmd.run:
+    - name: su -s /bin/sh -c "nova-manage api_db sync" nova
+nova_db_sync2:
+  cmd.run:
+    - name: su -s /bin/sh -c "nova-manage db sync" nova
+glance_registry_restart:
+  service.restart:
+    - services: 
+      - nova-api
+      - nova-conductor
+      - nova-consoleauth
+      - nova-novncproxy
+      - nova-scheduler

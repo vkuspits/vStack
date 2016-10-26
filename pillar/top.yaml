@@ -1,0 +1,8 @@
+base:
+  '*':
+    - nodes_conf
+    - security
+  '*cont*':
+    - controller_conf
+  '*com':
+    - compute_conf

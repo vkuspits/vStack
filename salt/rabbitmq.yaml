@@ -1,0 +1,18 @@
+install_rabbitmq:
+  pkg.installed:
+    - name: rabbitmq-server
+add_openstack_user:
+  rabbitmq.add_user:
+    - name: openstack
+    - password: {{ pillar['rabbit_pass'] }}
+    - require: pkg.rabbitmq-server
+set_permissions:
+  rabbitmq.set_permissions:
+    - conf: '.*'
+    - write: '.*'
+    - read: '.*'
+    - require: pkg.rabbitmq-server
+
+#  cmd.run: rabbitmqctl add_user openstack {{ pillar['rabbit_pass'] }}
+#  
+#  cmd.run: rabbitmqctl set_permisions openstack "." "." "."

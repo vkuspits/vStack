@@ -1,0 +1,44 @@
+create_glancedb:
+  mysql.db_create:
+    - name: nova
+create_glancedb:
+  mysql.db_create:
+    - name: nova_api
+grant_access_to_keystone:
+  mysql.grant_add:
+    - grant: 'ALL PRIVILEGES'
+    - database: 'nova.'
+    - user: nova
+    - password: {{ pillar['nova_dbpass'] }}
+    - host: 'localhost'
+grant_access_to_keystone2:
+  mysql.grant_add:
+    - grant: 'ALL PRIVILEGES'
+    - database: 'nova.'
+    - user: nova
+    - password: {{ pillar['nova_dbpass'] }}
+    - host: '%'
+grant_access_to_keystone:
+  mysql.grant_add:
+    - grant: 'ALL PRIVILEGES'
+    - database: 'nova_api.'
+    - user: nova
+    - password: {{ pillar['nova_dbpass'] }}
+    - host: 'localhost'
+grant_access_to_keystone2:
+  mysql.grant_add:
+    - grant: 'ALL PRIVILEGES'
+    - database: 'nova_api.'
+    - user: nova
+    - password: {{ pillar['nova_dbpass'] }}
+    - host: '%'
+{% set credentials = "--os-token {{ pillar['os_token'] }} --os-url {{ pillar['os_url'] }} --os-identity-api-version {{ pillar['os_v'] }}" %}
+openstack_glance_user_create:
+  cmd.run:
+    - name: openstack {{ credentials }} user create --domain default --pass {{ pillar['nova_pass'] }} nova
+openstack_glance_admin_role_attach:
+  cdm.run:
+    - name: openstack {{ credentials }} role add -project service --user nova admin
+openstack_glance_service_create:
+  cmd.run:
+    - name: openstack {{ credentials }} service create --name glance --description "Openstack Compute" compute

@@ -1,0 +1,7 @@
+base:
+  '*':
+    - preinstall
+  '*cont*':
+    - ntp
+  '*com*':
+    - ntp

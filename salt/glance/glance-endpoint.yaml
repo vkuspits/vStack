@@ -1,0 +1,13 @@
+{% set credentials = ""%}
+openstack_glance_public_endpoint_create:
+  cmd.run:
+    - name: openstack {{ credentials }} endpoint create --region RegionOne \ 
+            image public {{ pillar['glance_endpoint_addr'] }}
+openstack_glance_internal_endpoint_create:
+  cmd.run:
+    - name: openstack {{ credentials }} endpoint create --region RegionOne \
+            image internal {{ pillar['glance_endpoint_addr'] }}
+openstack_glance_admin_endpoint_create:
+  cmd.run:
+    - name: openstack {{ credentials }} endpoint create --region RegionOne \
+            image admin {{ pillar['glance_endpoint_addr'] }}

@@ -1,0 +1,16 @@
+install_sqldb:
+  pkg.installed:
+    - pkgs:
+      - mariadb-server
+      - python-pymysql
+config_sqldb:
+  file.managed:
+    - name: /etc/mysql/conf.d/openstack.cnf
+    - source: salt://mysql/conf.d/openstack.cnf
+minion_conf:
+  file.append:
+    - name: /etc/salt/minion
+    - text: "mysql.default_file: '/etc/mysql/my.cnf'"
+restart_sqldb:
+  service.restart:
+    - name: mysql

@@ -1,0 +1,12 @@
+install_memcached:
+  pkg.installed:
+    - pkgs:
+      - memcached
+      - python-memcache
+config_memcached:
+  file.append:
+    name: /etc/memcached.conf
+    text: -l {{ pillar['controller_ip']}}
+restart_memchahed:
+  service.restart:
+    name: memcached

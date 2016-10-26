@@ -1,0 +1,5 @@
+include: 
+  - openstack-client
+  - mariadb
+  - rabbitmq
+  - memcached
